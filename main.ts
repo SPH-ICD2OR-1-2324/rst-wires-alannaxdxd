@@ -16,6 +16,17 @@ function startPhase () {
         wireCount = game.askForNumber("# of wires? (3-6)", 1)
     }
 }
+controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (wireCount == 3) {
+        wire3()
+    } else if (wireCount == 4) {
+        wire4()
+    } else if (wireCount == 5) {
+        wire5()
+    } else if (wireCount == 6) {
+        wire6()
+    }
+})
 function InitSerial () {
     SerialNumber = game.askForNumber("Last Digit of Serial Number", 1)
 }
@@ -84,6 +95,29 @@ function InitColours () {
         mySprite2.top = Math.floor(120 / Ratio) * (index + 1)
     }
 }
+function wire3 () {
+    BlueCount = 0
+    RedCount = 0
+    WhiteCount = 0
+    for (let value of WireList) {
+        if (value == 2) {
+            BlueCount += 1
+        } else if (value == 0) {
+            RedCount += 1
+        } else if (value == 1) {
+            WhiteCount += 1
+        }
+    }
+    if (RedCount == 0) {
+        game.splash("\"Cut the second wire\"")
+    } else if (BlueCount == 1) {
+        game.splash("\"Cut the last blue wire\"")
+    } else if (WireList[2]) {
+        game.splash("\"Cut the last wire\"")
+    } else {
+        game.splash("\"Cut the last wire\"")
+    }
+}
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     WireList[cursorPos] = (WireList[cursorPos] + 1) % colourList.length
     WireSprites[cursorPos].fill(colourList[WireList[cursorPos]])
@@ -105,6 +139,82 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     cursorPos = cursorPos % wireCount
     UpdateCursor()
 })
+function wire5 () {
+    RedCount = 0
+    BlackCount = 0
+    YellowCount = 0
+    for (let value of WireList) {
+        if (value == 4) {
+            BlackCount += 1
+        } else if (value == 0) {
+            RedCount += 1
+        } else if (value == 3) {
+            YellowCount += 1
+        }
+    }
+    if (WireList[4] == 4 && SerialNumber % 2 == 1) {
+        game.splash("Cut the Fourth Wire")
+    } else if (RedCount == 1 && YellowCount == 1) {
+        game.splash("Cut the First Wire")
+    } else if (BlueCount == 0) {
+        game.splash("Cut the Second Wire")
+    } else {
+        game.splash("Cut the First Wire")
+    }
+}
+function wire6 () {
+    RedCount = 0
+    WhiteCount = 0
+    YellowCount = 0
+    for (let value of WireList) {
+        if (value == 0) {
+            RedCount += 1
+        } else if (value == 3) {
+            RedCount += 1
+        } else if (value == 1) {
+            YellowCount += 1
+        }
+    }
+    if (YellowCount == 0 && SerialNumber % 2 == 1) {
+        game.splash("Cut the Third Wire")
+    } else if (YellowCount == 1 && WhiteCount == 1) {
+        game.splash("Cut the Fourth Wire")
+    } else if (RedCount == 0) {
+        game.splash("Cut the last wire")
+    } else {
+        game.splash("Cut the fourth wire")
+    }
+}
+function wire4 () {
+    RedCount = 0
+    YellowCount = 0
+    BlueCount = 0
+    for (let value of WireList) {
+        if (value == 0) {
+            RedCount += 1
+        } else if (value == 3) {
+            YellowCount += 1
+        } else if (value == 2) {
+            BlueCount += 1
+        }
+    }
+    if (RedCount == 1 && SerialNumber % 2 == 1) {
+        game.splash("\"Cut the last red wire\"")
+    } else if (WireList[3] == 3 && RedCount == 0) {
+        game.splash("Cut the first wire")
+    } else if (BlueCount == 1) {
+        game.splash("\"Cut the first wire\"")
+    } else if (YellowCount == 1) {
+        game.splash("\"Cut the last wire\"")
+    } else {
+        game.splash("\"Cut the last wire\"")
+    }
+}
+let YellowCount = 0
+let BlackCount = 0
+let WhiteCount = 0
+let RedCount = 0
+let BlueCount = 0
 let mySprite: Image = null
 let mySprite2: Sprite = null
 let sprite_list: Sprite[] = []
